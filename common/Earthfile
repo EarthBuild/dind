@@ -6,11 +6,11 @@ FROM alpine
 # EARTHLY_REPO_VERSION specifies a branch and/or commit of earthly/earthly (it defaults to the earthly cli version if left empty)
 ARG EARTHLY_REPO_VERSION
 
-IMPORT github.com/earthly/earthly/buildkitd:$EARTHLY_REPO_VERSION AS earthly
-IMPORT github.com/earthly/earthly/tests/with-docker:$EARTHLY_REPO_VERSION AS with-docker
-IMPORT github.com/earthly/earthly/tests/with-docker-compose:$EARTHLY_REPO_VERSION AS with-docker-compose
-IMPORT github.com/earthly/earthly/tests/with-docker-kind:$EARTHLY_REPO_VERSION AS with-docker-kind
-IMPORT github.com/earthly/earthly/tests/dind-auto-install:$EARTHLY_REPO_VERSION AS dind-auto-install
+IMPORT github.com/EarthBuild/earthbuild/buildkitd:$EARTHLY_REPO_VERSION AS earthly
+IMPORT github.com/EarthBuild/earthbuild/tests/with-docker:$EARTHLY_REPO_VERSION AS with-docker
+IMPORT github.com/EarthBuild/earthbuild/tests/with-docker-compose:$EARTHLY_REPO_VERSION AS with-docker-compose
+IMPORT github.com/EarthBuild/earthbuild/tests/with-docker-kind:$EARTHLY_REPO_VERSION AS with-docker-kind
+IMPORT github.com/EarthBuild/earthbuild/tests/dind-auto-install:$EARTHLY_REPO_VERSION AS dind-auto-install
 
 # DOCKERHUB_USER is the organization name in docker hub (default: earthly)
 ARG --global DOCKERHUB_USER
@@ -26,6 +26,14 @@ build:
     # DOCKER_VERSION is the version of docker to use, e.g. 20.10.14
     ARG --required DOCKER_VERSION
     FROM $OS_IMAGE:$OS_VERSION
+    # Ubuntu 23.04 has reached EOL
+    IF [ "$OS_VERSION" = "23.04" ]
+        RUN sed -i \
+            -e 's/archive.ubuntu.com\/ubuntu/old-releases.ubuntu.com\/ubuntu/g' \
+            -e 's/ports.ubuntu.com\/ubuntu-ports/old-releases.ubuntu.com\/ubuntu/g' \
+            -e 's/security.ubuntu.com\/ubuntu/old-releases.ubuntu.com\/ubuntu/g' \
+            /etc/apt/sources.list
+    END
     COPY earthly+export-docker-script/docker-auto-install.sh /usr/local/bin/docker-auto-install.sh
     RUN docker-auto-install.sh
     LET DOCKER_VERSION_TAG=$DOCKER_VERSION
