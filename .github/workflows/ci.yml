@@ -14,13 +14,19 @@ concurrency:
 jobs:
   test:
     name: test
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     env:
       FORCE_COLOR: 1
       EARTHLY_CONVERSION_PARALLELISM: "5"
       EARTHLY_TOKEN: "${{ secrets.EARTHLY_TOKEN }}"
       EARTHLY_INSTALL_ID: "earthly-dind-githubactions"
     steps:
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: all
       - uses: earthly/actions/setup-earthly@v1
         with:
           version: v0.8.15
