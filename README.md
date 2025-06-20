@@ -8,7 +8,7 @@ For information on how to use these images, please refer to [docker in earthly](
 
 ## Supported Distributions
 
-There are currently 3 supported dind distributions available:
+There are currently 4 supported dind distributions available:
 - `alpine`
 - `ubuntu:20.04`
 - `ubuntu:23.04`
