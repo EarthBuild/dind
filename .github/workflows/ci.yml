@@ -21,11 +21,11 @@ jobs:
       EARTHLY_TOKEN: "${{ secrets.EARTHLY_TOKEN }}"
       EARTHLY_INSTALL_ID: "earthly-dind-githubactions"
     steps:
-      # - name: Set up Docker Hub mirrors
-      #   run: |
-      #     sudo mkdir -p /etc/docker
-      #     echo '{"registry-mirrors": ["https://mirror.gcr.io"]}' | sudo tee /etc/docker/daemon.json
-      #     sudo systemctl restart docker
+      - name: Set up Docker Hub mirrors
+        run: |
+          sudo mkdir -p /etc/docker
+          echo '{"registry-mirrors": ["https://mirror.gcr.io"]}' | sudo tee /etc/docker/daemon.json
+          sudo systemctl restart docker
       - name: Set up QEMU
         id: qemu
         uses: docker/setup-qemu-action@v3
