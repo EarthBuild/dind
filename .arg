@@ -1,4 +1,4 @@
-CR_HOST=gchr.io
+CR_HOST=ghcr.io
 CR_USER=earthbuild
 IMAGE_NAME=dind
 EARTHLY_REPO_VERSION=0b28ef80785fd88df1ec7e674475b02e046d5b36
