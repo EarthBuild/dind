@@ -12,8 +12,8 @@ IMPORT github.com/EarthBuild/earthbuild/tests/with-docker-compose:$EARTHLY_REPO_
 IMPORT github.com/EarthBuild/earthbuild/tests/with-docker-kind:$EARTHLY_REPO_VERSION AS with-docker-kind
 IMPORT github.com/EarthBuild/earthbuild/tests/dind-auto-install:$EARTHLY_REPO_VERSION AS dind-auto-install
 
-# CR_USER is the organization name in a container registry (default: earthbuild)
-ARG --global CR_USER
+# CR_ORG is the organization name in a container registry (default: earthbuild)
+ARG --global CR_ORG
 # IMAGE_NAME is the image repository in docker hub (default: dind)
 ARG --global IMAGE_NAME
 
@@ -40,8 +40,8 @@ build:
     IF [ "$OS_IMAGE" = "alpine" ]
         RUN apk add iptables-legacy # required for older kernels
     END
-    # CR_USER is the organization name in container registry (default: earthbuild)
-    ARG CR_USER
+    # CR_ORG is the organization name in container registry (default: earthbuild)
+    ARG CR_ORG
     # IMAGE_NAME is the image repository in docker hub (default: dind)
     ARG IMAGE_NAME
     COPY --dir --pass-args +get-image-info/image-info .
@@ -68,12 +68,12 @@ get-image-info:
         RUN if echo $DOCKER_VERSION_TAG | grep "[^0-9.-]"; then echo "DOCKER_VERSION_TAG looks bad; got $DOCKER_VERSION_TAG" && exit 1; fi
     END
     LET TAG=$OS_IMAGE-$OS_VERSION-docker-$DOCKER_VERSION_TAG
-    # CR_USER is the organization name in container registry (default: earthbuild)
-    ARG --required CR_USER
+    # CR_ORG is the organization name in container registry (default: earthbuild)
+    ARG --required CR_ORG
     # IMAGE_NAME is the image repository in docker hub (default: dind)
     ARG --required IMAGE_NAME
-    # image_full_name excludes container registry name
-    LET image_full_name=$CR_USER/$IMAGE_NAME
+    # image_full_name excludes container registry host
+    LET image_full_name=$CR_ORG/$IMAGE_NAME
     ARG SUFFIX
     IF [ -n "$SUFFIX" ]
         SET TAG="$TAG-$SUFFIX"
@@ -125,12 +125,12 @@ push-new-tag:
             exit 1
         END
     END
-    FROM $CR_USER/$IMAGE_NAME:$TAG_WITH_DATE
+    FROM $CR_ORG/$IMAGE_NAME:$TAG_WITH_DATE
     LET new_tag="$(echo ${TAG_WITH_DATE%-*})"
     IF [ "$new_tag" = "$TAG_WITH_DATE" ]
        RUN --no-cache echo "failed to remove date from tag $TAG_WITH_DATE" && exit 1
     END
-    SAVE IMAGE --push $CR_USER/$IMAGE_NAME:$new_tag
+    SAVE IMAGE --push $CR_ORG/$IMAGE_NAME:$new_tag
 
 # push-new-tag-multi-platform builds push-new-tag using both amd64 & arm64 platforms.
 push-new-tag-multi-platform:

@@ -65,7 +65,7 @@ earthly --push -P +test
 
 #### Community members
 
-Community members do not have permissions to push a built image and run the tests against it. However, they can easily set a different container registry by changing the `CR_HOST` (default: ghcr.io) and `CR_USER` ARG values in [.arg](.arg) to a private container registry or by passing the arg in the earthly command, e.g. `earthly --push -P +test --CR_HOST=<your-container-registry> --CR_USER=<your-user>`.
+Community members do not have permissions to push a built image and run the tests against it. However, they can easily set a different container registry repository by changing the `CR_HOST` (default: ghcr.io) and `CR_ORG` ARG values in [.arg](.arg) to a private container registry repository or by passing the args in the earthly command, e.g. `earthly --push -P +test --CR_HOST=<your-container-registry> --CR_ORG=<your-organization>`.
 
 ## Deployment
 
