@@ -21,7 +21,6 @@ jobs:
     env:
       FORCE_COLOR: 1
       EARTHLY_CONVERSION_PARALLELISM: "5"
-      EARTHLY_TOKEN: "${{ secrets.EARTHLY_TOKEN }}"
       EARTHLY_INSTALL_ID: "earthly-dind-githubactions"
     steps:
       - name: Load kernel modules for IPv6 NAT
@@ -43,7 +42,7 @@ jobs:
         with:
           image: tonistiigi/binfmt:latest
           platforms: all
-      - uses: earthly/actions/setup-earthly@v1
+      - uses: earthbuild/actions-setup@main
         with:
           version: v0.8.15
       - uses: actions/checkout@v4
