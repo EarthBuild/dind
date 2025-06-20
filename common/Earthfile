@@ -12,8 +12,8 @@ IMPORT github.com/EarthBuild/earthbuild/tests/with-docker-compose:$EARTHLY_REPO_
 IMPORT github.com/EarthBuild/earthbuild/tests/with-docker-kind:$EARTHLY_REPO_VERSION AS with-docker-kind
 IMPORT github.com/EarthBuild/earthbuild/tests/dind-auto-install:$EARTHLY_REPO_VERSION AS dind-auto-install
 
-# DOCKERHUB_USER is the organization name in docker hub (default: earthly)
-ARG --global DOCKERHUB_USER
+# CR_USER is the organization name in a container registry (default: earthbuild)
+ARG --global CR_USER
 # IMAGE_NAME is the image repository in docker hub (default: dind)
 ARG --global IMAGE_NAME
 
@@ -40,8 +40,8 @@ build:
     IF [ "$OS_IMAGE" = "alpine" ]
         RUN apk add iptables-legacy # required for older kernels
     END
-    # DOCKERHUB_USER is the organization name in docker hub (default: earthly)
-    ARG DOCKERHUB_USER
+    # CR_USER is the organization name in container registry (default: earthbuild)
+    ARG CR_USER
     # IMAGE_NAME is the image repository in docker hub (default: dind)
     ARG IMAGE_NAME
     COPY --dir --pass-args +get-image-info/image-info .
@@ -49,7 +49,8 @@ build:
     LET image_tag=$(cat image-info/tag)
     RUN rm -rf image-info
     ENV OTEL_TRACES_EXPORTER=none # disabled for speed improvement; see https://github.com/earthly/earthly/issues/4066
-    SAVE IMAGE --push $image_name:$image_tag
+    ARG --required CR_HOST
+    SAVE IMAGE --push $CR_HOST/$image_name:$image_tag
 
 # get-image-info generates the image name and tag as a saved artifact so it can be used by multiple targets
 get-image-info:
@@ -67,11 +68,12 @@ get-image-info:
         RUN if echo $DOCKER_VERSION_TAG | grep "[^0-9.-]"; then echo "DOCKER_VERSION_TAG looks bad; got $DOCKER_VERSION_TAG" && exit 1; fi
     END
     LET TAG=$OS_IMAGE-$OS_VERSION-docker-$DOCKER_VERSION_TAG
-    # DOCKERHUB_USER is the organization name in docker hub (default: earthly)
-    ARG --required DOCKERHUB_USER
+    # CR_USER is the organization name in container registry (default: earthbuild)
+    ARG --required CR_USER
     # IMAGE_NAME is the image repository in docker hub (default: dind)
     ARG --required IMAGE_NAME
-    LET image_full_name=$DOCKERHUB_USER/$IMAGE_NAME
+    # image_full_name excludes container registry name
+    LET image_full_name=$CR_USER/$IMAGE_NAME
     ARG SUFFIX
     IF [ -n "$SUFFIX" ]
         SET TAG="$TAG-$SUFFIX"
@@ -83,7 +85,7 @@ get-image-info:
 
 # test runs tests against the specified image (DIND_IMAGE) or otherwise uses the image specified in earthly/earthly repo
 test:
-    # DIND_IMAGE is the full docker image name & tag to run the tests against. The image must exist in the remote docker registry
+    # DIND_IMAGE is the full container image name & tag to run the tests against. The image must exist in the remote container registry
     ARG DIND_IMAGE
     BUILD --pass-args with-docker+all --DIND_IMAGE=$DIND_IMAGE
     BUILD --pass-args dind-auto-install+test --BASE_IMAGE=$DIND_IMAGE
@@ -107,7 +109,7 @@ build-and-test:
         # EARTHLY_PUSH is a builtin arg that helps determine if the tests should run
         ARG EARTHLY_PUSH
         IF [ "$EARTHLY_PUSH" = "true" ]
-            BUILD --pass-args ../os/$DIR_PATH+test --DIND_IMAGE=$image_name:$image_tag
+            BUILD --pass-args ../os/$DIR_PATH+test --DIND_IMAGE=$CR_HOST/$image_name:$image_tag
         END
     END
 
@@ -122,12 +124,12 @@ push-new-tag:
             exit 1
         END
     END
-    FROM $DOCKERHUB_USER/$IMAGE_NAME:$TAG_WITH_DATE
+    FROM $CR_USER/$IMAGE_NAME:$TAG_WITH_DATE
     LET new_tag="$(echo ${TAG_WITH_DATE%-*})"
     IF [ "$new_tag" = "$TAG_WITH_DATE" ]
        RUN --no-cache echo "failed to remove date from tag $TAG_WITH_DATE" && exit 1
     END
-    SAVE IMAGE --push $DOCKERHUB_USER/$IMAGE_NAME:$new_tag
+    SAVE IMAGE --push $CR_USER/$IMAGE_NAME:$new_tag
 
 # push-new-tag-multi-platform builds push-new-tag using both amd64 & arm64 platforms.
 push-new-tag-multi-platform:

@@ -44,9 +44,8 @@ jobs:
         with:
           version: v0.8.15
       - uses: actions/checkout@v4
-      - name: Docker login (non fork only)
-        run: |-
-          docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_TOKEN }}"
+      - name: Log in to registry (non fork only)
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
         if: github.event.pull_request.head.repo.full_name == github.repository
       - name: Run tests
         run: earthly --ci -P --push +test
