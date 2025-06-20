@@ -105,6 +105,7 @@ build-and-test:
     COPY --dir --pass-args +get-image-info/image-info .
     LET image_name=$(cat image-info/name)
     LET image_tag=$(cat image-info/tag)
+    ARG --required CR_HOST
     WAIT
         # EARTHLY_PUSH is a builtin arg that helps determine if the tests should run
         ARG EARTHLY_PUSH
