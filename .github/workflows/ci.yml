@@ -21,7 +21,7 @@ jobs:
     env:
       FORCE_COLOR: 1
       EARTHLY_CONVERSION_PARALLELISM: "5"
-      EARTHLY_INSTALL_ID: "earthly-dind-githubactions"
+      EARTHLY_INSTALL_ID: "earthbuild-dind-githubactions"
     steps:
       - name: Load kernel modules for IPv6 NAT
         run: |
