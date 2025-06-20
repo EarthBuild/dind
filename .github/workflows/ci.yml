@@ -21,6 +21,14 @@ jobs:
       EARTHLY_TOKEN: "${{ secrets.EARTHLY_TOKEN }}"
       EARTHLY_INSTALL_ID: "earthly-dind-githubactions"
     steps:
+      - name: Load kernel modules for IPv6 NAT
+        run: |
+          sudo modprobe ip6_tables
+          sudo modprobe ip6table_nat
+          echo "--- Loaded kernel modules (checking for ip6_tables, ip6table_nat) ---"
+          lsmod | grep -E "ip6_tables|ip6table_nat"
+          echo "--- Checking ip6tables nat table availability on runner ---"
+          sudo ip6tables -t nat -L -n || echo "Warning: ip6tables nat table still not accessible on the runner after modprobe."
       - name: Set up Docker Hub mirrors
         run: |
           sudo mkdir -p /etc/docker
