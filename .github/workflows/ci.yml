@@ -32,7 +32,6 @@ jobs:
         with:
           image: tonistiigi/binfmt:latest
           platforms: all
-      - run: docker system info
       - uses: earthly/actions/setup-earthly@v1
         with:
           version: v0.8.15
