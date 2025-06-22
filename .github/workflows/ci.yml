@@ -5,35 +5,46 @@ on:
   # push:
   #   branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
-  
+
 jobs:
   test:
     name: test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     env:
       FORCE_COLOR: 1
       EARTHLY_CONVERSION_PARALLELISM: "5"
-      EARTHLY_TOKEN: "${{ secrets.EARTHLY_TOKEN }}"
-      EARTHLY_INSTALL_ID: "earthly-dind-githubactions"
+      EARTHLY_INSTALL_ID: "earthbuild-dind-githubactions"
     steps:
-      - uses: earthly/actions/setup-earthly@v1
+      # The dind (common+alpine-kind-test and common+ubuntu-kind-test) detects
+      # the host's IPv6 capability and then requires IPv6 NAT to create networks
+      # for kind. So we load it here.
+      # Ref: https://github.com/moby/moby/pull/47062
+      - name: Load kernel module IPv6 NAT
+        run: sudo modprobe ip6table_nat
+      - name: Set up Docker Hub mirrors
+        run: |
+          sudo mkdir -p /etc/docker
+          echo '{"registry-mirrors": ["https://mirror.gcr.io", "https://public.ecr.aws"]}' | sudo tee /etc/docker/daemon.json
+          sudo systemctl restart docker
+      - name: Set up QEMU
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-user-static binfmt-support
+          sudo update-binfmts --display
+      - uses: earthbuild/actions-setup@main
         with:
           version: v0.8.15
       - uses: actions/checkout@v4
-      - name: Docker login (non fork only)
-        run: |-
-          docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_TOKEN }}"
-          docker login registry-1.docker.io.mirror.corp.earthly.dev --username "${{ secrets.DOCKERHUB_MIRROR_USERNAME }}" --password "${{ secrets.DOCKERHUB_MIRROR_PASSWORD }}"
-        if: github.event.pull_request.head.repo.full_name == github.repository
-      - name: Configure Earthly to use mirror (non fork only)
-        run: |-
-          earthly config global.buildkit_additional_config "'[registry.\"docker.io\"]
-          mirrors = [\"registry-1.docker.io.mirror.corp.earthly.dev\"]'"
+      - name: Log in to GitHub Container Registry (non fork only)
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
         if: github.event.pull_request.head.repo.full_name == github.repository
       - name: Run tests
-        run: earthly --ci -P --push --org earthly-technologies --satellite dind +test
+        run: earthly --ci -P --push +test

@@ -8,7 +8,7 @@ For information on how to use these images, please refer to [docker in earthly](
 
 ## Supported Distributions
 
-There are currently 3 supported dind distributions available: 
+There are currently 4 supported dind distributions available:
 - `alpine`
 - `ubuntu:20.04`
 - `ubuntu:23.04`
@@ -30,7 +30,7 @@ dependencies that will trigger new versions of the dind images such as the docke
 
 ```bash
 .
-├── Earthfile // Targets that apply to all images (e.g. +test) 
+├── Earthfile // Targets that apply to all images (e.g. +test)
 ├── common
 │   └── Earthfile // A library of common helper targets
 └── os // Each directory contains an Earthfile with targets to maintain the specific os (e.g. +test, +build)
@@ -65,7 +65,7 @@ earthly --push -P +test
 
 #### Community members
 
-Community members do not have permissions to push a built image and run the tests against it. However, they can easily set a different dockerhub repository by changing the `DOCKERHUB_USER` ARG value in [.arg](.arg) to a private repository or by passing the arg in the earthly command, e.g. `earthly --push -P +test --DOCKERHUB_USER=<your-user>`.
+Community members do not have permissions to push a built image and run the tests against it. However, they can easily set a different container registry repository by changing the `CR_HOST` (default: ghcr.io) and `CR_ORG` ARG values in [.arg](.arg) to a private container registry repository or by passing the args in the earthly command, e.g. `earthly --push -P +test --CR_HOST=<your-container-registry> --CR_ORG=<your-organization>`.
 
 ## Deployment
 
