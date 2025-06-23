@@ -3,7 +3,7 @@
 ![Docker Pulls](https://img.shields.io/docker/pulls/earthbuild/dind)
 
 
-EarthBuilds's official [ghcr.io/earthbuild/dind](https://github.com/EarthBuild/dind/pkgs/container/dind) and [earthbuild/dind](https://hub.docker.com/repository/docker/earthly/dind/general) container images.
+EarthBuilds's official [ghcr.io/earthbuild/dind](https://ghcr.io/earthbuild/dind) and [earthbuild/dind](https://hub.docker.com/r/earthlbuild/dind) container images.
 For information on how to use these images, please refer to [docker in EarthBuild](https://docs.earthly.dev/docs/guides/docker-in-earthly).
 
 ## Supported Distributions
@@ -69,7 +69,7 @@ Community members do not have permissions to push a built image and run the test
 
 ## Deployment
 
-When the relevant dependencies are updated by Renovate, new images/tags will be pushed automatically to the container registries - [ghcr.io/earthbuild/dind](https://github.com/EarthBuild/dind/pkgs/container/dind) and [earthbuild/dind](https://hub.docker.com/repository/docker/earthly/dind/general).
+When the relevant dependencies are updated by Renovate, new images/tags will be pushed automatically to the container registries - [ghcr.io/earthbuild/dind](https://ghcr.io/earthbuild/dind) and [earthbuild/dind](https://hub.docker.com/r/earthlbuild/dind).
 
 ## Contributing
 
