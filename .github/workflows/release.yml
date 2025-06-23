@@ -35,5 +35,5 @@ jobs:
         if: github.event.pull_request.head.repo.full_name == github.repository
       - name: Build & Push image
         run: |
-          earthly --ci -P +release --RENOVATE_BRANCH=${{github.head_ref}} # default:ghcr.io
-          earthly --ci -P +release --RENOVATE_BRANCH=${{github.head_ref}} --CR_HOST=docker.io
+          earthly --ci -P +release --RENOVATE_BRANCH=renovate/major-28-ubuntu-23.04-dind-image # default:ghcr.io
+          earthly --ci -P +release --RENOVATE_BRANCH=renovate/major-28-ubuntu-23.04-dind-image --CR_HOST=docker.io
