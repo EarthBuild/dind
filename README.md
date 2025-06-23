@@ -1,10 +1,10 @@
-# Earthly dind (Docker In Docker) Images
-[![Release](https://github.com/earthly/dind/actions/workflows/release.yml/badge.svg)](https://github.com/earthly/dind/actions/workflows/release.yml)
-![Docker Pulls](https://img.shields.io/docker/pulls/earthly/dind)
+# EarthBuild dind (Docker In Docker) Images
+[![Release](https://github.com/earthbuild/dind/actions/workflows/release.yml/badge.svg)](https://github.com/earthbuild/dind/actions/workflows/release.yml)
+![Docker Pulls](https://img.shields.io/docker/pulls/earthbuild/dind)
 
 
-Earthly's official [earthly/dind](https://hub.docker.com/repository/docker/earthly/dind/general) docker images.
-For information on how to use these images, please refer to [docker in earthly](https://docs.earthly.dev/docs/guides/docker-in-earthly).
+EarthBuilds's official [ghcr.io/earthbuild/dind](https://github.com/EarthBuild/dind/pkgs/container/dind) and [earthbuild/dind](https://hub.docker.com/repository/docker/earthly/dind/general) container images.
+For information on how to use these images, please refer to [docker in EarthBuild](https://docs.earthly.dev/docs/guides/docker-in-earthly).
 
 ## Supported Distributions
 
@@ -19,7 +19,7 @@ Other distributions and/or base images can be used with our [dind+INSTALL](https
 ## How Images are Built
 
 In this repository, we maintain the OS & Docker versions that warrants releasing a new version of the image.
-However, the installations of docker and other dependencies are done via an installation script that is currently maintained in [earthly/earthly](https://github.com/earthly/earthly).
+However, the installations of docker and other dependencies are done via an installation script that is currently maintained in [earthbuild/earthbuild](https://github.com/earthbuild/earthbuild).
 
 ### Dependencies
 
@@ -46,7 +46,7 @@ dependencies that will trigger new versions of the dind images such as the docke
 
 ## Testing
 
-Images are tested by running remote test targets that are maintained in [earthly/earthly](https://github.com/earthly/earthly/tree/main/tests/with-docker). This is because these tests also help test [WITH DOCKER](https://docs.earthly.dev/docs/earthfile#with-docker) command in earthly cli.
+Images are tested by running remote test targets that are maintained in [earthbuild/earthbuild](https://github.com/earthbuild/earthbuild/tree/main/tests/with-docker). This is because these tests also help test [WITH DOCKER](https://docs.earthly.dev/docs/earthfile#with-docker) command in earthly cli.
 
 Temporary images are built, pushed, and pulled as part of the test cycle.
 
@@ -69,11 +69,11 @@ Community members do not have permissions to push a built image and run the test
 
 ## Deployment
 
-When the relevant dependencies are updates by Renovate, new images/tags will be pushed automatically to the docker registry.
+When the relevant dependencies are updated by Renovate, new images/tags will be pushed automatically to the container registries - [ghcr.io/earthbuild/dind](https://github.com/EarthBuild/dind/pkgs/container/dind) and [earthbuild/dind](https://hub.docker.com/repository/docker/earthly/dind/general).
 
 ## Contributing
 
-* Please report bugs as [GitHub issues](https://github.com/earthly/dind/issues).
+* Please report bugs as [GitHub issues](https://github.com/earthbuild/dind/issues).
 * Join us on [Slack](https://earthly.dev/slack)!
 * Questions via GitHub issues are welcome!
 * PRs welcome! But please give a heads-up in a GitHub issue before starting work. If there is no GitHub issue for what you want to do, please create one.

@@ -7,27 +7,31 @@ on:
 jobs:
   release:
     name: release after merging ${{ github.head_ref }}
-    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'renovate/') && endsWith(github.head_ref, '-dind-image')
+    # if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'renovate/') && endsWith(github.head_ref, '-dind-image')
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     env:
       FORCE_COLOR: 1
       EARTHLY_CONVERSION_PARALLELISM: "5"
-      EARTHLY_TOKEN: "${{ secrets.EARTHLY_TOKEN }}"
-      EARTHLY_INSTALL_ID: "earthly-dind-githubactions"
+      EARTHLY_INSTALL_ID: "earthbuild-dind-githubactions"
     steps:
-      - uses: earthly/actions/setup-earthly@v1
+      - uses: earthbuild/actions-setup@main
         with:
           version: v0.8.15
       - uses: actions/checkout@v4
-      - name: Docker login (non fork only)
+      - name: Set up Docker Hub mirrors
+        run: |
+          sudo mkdir -p /etc/docker
+          echo '{"registry-mirrors": ["https://mirror.gcr.io", "https://public.ecr.aws"]}' | sudo tee /etc/docker/daemon.json
+          sudo systemctl restart docker
+      - name: Log in to container registries (non fork only)
         run: |-
           docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_TOKEN }}"
-          docker login registry-1.docker.io.mirror.corp.earthly.dev --username "${{ secrets.DOCKERHUB_MIRROR_USERNAME }}" --password "${{ secrets.DOCKERHUB_MIRROR_PASSWORD }}"
-        if: github.event.pull_request.head.repo.full_name == github.repository
-      - name: Configure Earthly to use mirror (non fork only)
-        run: |-
-          earthly config global.buildkit_additional_config "'[registry.\"docker.io\"]
-          mirrors = [\"registry-1.docker.io.mirror.corp.earthly.dev\"]'"
+          docker login ghcr.io --username ${{ github.actor }} --password "${{ secrets.GITHUB_TOKEN }}"
         if: github.event.pull_request.head.repo.full_name == github.repository
       - name: Build & Push image
-        run: earthly --ci -P --push --org earthly-technologies --satellite dind +release --RENOVATE_BRANCH=${{github.head_ref}}
+        run: |
+          earthly --ci -P +release --RENOVATE_BRANCH=${{github.head_ref}} # default:ghcr.io
+          earthly --ci -P +release --RENOVATE_BRANCH=${{github.head_ref}} --CR_HOST=docker.io
