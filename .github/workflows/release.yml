@@ -19,15 +19,26 @@ jobs:
       EARTHLY_CONVERSION_PARALLELISM: "5"
       EARTHLY_INSTALL_ID: "earthbuild-dind-githubactions"
     steps:
-      - uses: earthbuild/actions-setup@main
-        with:
-          version: v0.8.15
-      - uses: actions/checkout@v4
+      # The dind (common+alpine-kind-test and common+ubuntu-kind-test) detects
+      # the host's IPv6 capability and then requires IPv6 NAT to create networks
+      # for kind. So we load it here.
+      # Ref: https://github.com/moby/moby/pull/47062
+      - name: Load kernel module IPv6 NAT
+        run: sudo modprobe ip6table_nat
       - name: Set up Docker Hub mirrors
         run: |
           sudo mkdir -p /etc/docker
           echo '{"registry-mirrors": ["https://mirror.gcr.io", "https://public.ecr.aws"]}' | sudo tee /etc/docker/daemon.json
           sudo systemctl restart docker
+      - name: Set up QEMU
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-user-static binfmt-support
+          sudo update-binfmts --display
+      - uses: earthbuild/actions-setup@main
+        with:
+          version: v0.8.15
+      - uses: actions/checkout@v4
       - name: Log in to container registries (non fork only)
         run: |-
           docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_TOKEN }}"
