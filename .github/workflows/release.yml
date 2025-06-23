@@ -1,15 +1,13 @@
 name: Release
 
 on:
-  pull_request:
-    branches: ["main"]
-  # pull_request_target:
-  #   types: [ closed ]
+  pull_request_target:
+    types: [ closed ]
 
 jobs:
   release:
     name: release after merging ${{ github.head_ref }}
-    # if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'renovate/') && endsWith(github.head_ref, '-dind-image')
+    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'renovate/') && endsWith(github.head_ref, '-dind-image')
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -46,5 +44,5 @@ jobs:
         if: github.event.pull_request.head.repo.full_name == github.repository
       - name: Build & Push image
         run: |
-          earthly --ci -P --push +release --RENOVATE_BRANCH=renovate/major-28-ubuntu-23.04-dind-image # default:ghcr.io
-          earthly --ci -P --push +release --RENOVATE_BRANCH=renovate/major-28-ubuntu-23.04-dind-image --CR_HOST=docker.io
+          earthly --ci -P --push +release --RENOVATE_BRANCH=${{github.head_ref}} # default:ghcr.io
+          earthly --ci -P --push +release --RENOVATE_BRANCH=${{github.head_ref}} --CR_HOST=docker.io
