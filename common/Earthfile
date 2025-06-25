@@ -125,12 +125,13 @@ push-new-tag:
             exit 1
         END
     END
-    FROM $CR_ORG/$IMAGE_NAME:$TAG_WITH_DATE
+    ARG --required CR_HOST
+    FROM $CR_HOST/$CR_ORG/$IMAGE_NAME:$TAG_WITH_DATE
     LET new_tag="$(echo ${TAG_WITH_DATE%-*})"
     IF [ "$new_tag" = "$TAG_WITH_DATE" ]
        RUN --no-cache echo "failed to remove date from tag $TAG_WITH_DATE" && exit 1
     END
-    SAVE IMAGE --push $CR_ORG/$IMAGE_NAME:$new_tag
+    SAVE IMAGE --push $CR_HOST/$CR_ORG/$IMAGE_NAME:$new_tag
 
 # push-new-tag-multi-platform builds push-new-tag using both amd64 & arm64 platforms.
 push-new-tag-multi-platform:
