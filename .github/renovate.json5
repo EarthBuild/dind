@@ -21,7 +21,7 @@
   },
   customManagers: [
     {
-      // Earthlbuild Version in GH Actions
+      // Earthbuild Version in GH Actions
       customType: 'regex',
       fileMatch: [
         '.*?\\.yml',
