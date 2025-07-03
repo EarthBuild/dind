@@ -3,6 +3,7 @@
   extends: [
     "config:recommended"
   ],
+  forkProcessing: "enabled",
   configMigration: true,
   prHourlyLimit: 1,
   schedule: [ // utc timezone
