@@ -9,8 +9,8 @@ IMPORT ../../common AS common
 ARG --global OS_IMAGE=alpine
 
 # renovate: datasource=docker depName=alpine
-ARG --global OS_VERSION=3.20
-# renovate: datasource=repology depName=alpine_3_20/docker versioning=loose
+ARG --global OS_VERSION=3.22
+# renovate: datasource=repology depName=alpine_3_22/docker versioning=loose
 ARG --global DOCKER_VERSION=26.1.5-r0
 
 # DIR_PATH is set to that common targets can call os specific targets. It should match the directory name this Earthfile is located in
