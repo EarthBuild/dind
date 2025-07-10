@@ -9,6 +9,8 @@ IMPORT ../../common AS common
 ARG --global OS_IMAGE=ubuntu
 
 ARG --global OS_VERSION=23.04
+
+# Docker v25.0.2 is the last version supported by the Docker apt repo.
 # renovate: datasource=github-releases depName=docker/docker
 LET docker_package_version=25.0.2
 ARG --global DOCKER_VERSION=5:$docker_package_version-1~ubuntu.$OS_VERSION~lunar
