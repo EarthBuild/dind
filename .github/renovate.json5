@@ -101,6 +101,7 @@
       ],
     },
     {
+      // Lock docker to v25.0.2 for Ubuntu 23.04.
       matchFileNames: [
         'os/ubuntu-23.04/Earthfile',
       ],
