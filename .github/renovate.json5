@@ -101,6 +101,16 @@
       ],
     },
     {
+      // Lock docker to v25.0.2 for Ubuntu 23.04.
+      matchFileNames: [
+        'os/ubuntu-23.04/Earthfile',
+      ],
+      matchPackageNames: [
+        'docker/docker',
+      ],
+      allowedVersions: '25.0.2',
+    },
+    {
       automerge: true,
       matchPackageNames: [
         '*',
