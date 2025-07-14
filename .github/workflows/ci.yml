@@ -22,6 +22,7 @@ jobs:
       FORCE_COLOR: 1
       EARTHLY_CONVERSION_PARALLELISM: "5"
       EARTHLY_INSTALL_ID: "earthbuild-dind-githubactions"
+      EARTHLY_REMOTE_CACHE: ghcr.io/earthbuild/ci-dind:cache
     steps:
       - uses: actions/checkout@v4
       # The dind (common+alpine-kind-test and common+ubuntu-kind-test) detects
