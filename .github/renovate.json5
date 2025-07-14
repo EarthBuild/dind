@@ -101,6 +101,16 @@
       ],
     },
     {
+      // Lock docker to v28.1.1 for Ubuntu 20.04.
+      matchFileNames: [
+        'os/ubuntu-20.04/Earthfile',
+      ],
+      matchPackageNames: [
+        'docker/docker',
+      ],
+      allowedVersions: '28.1.1',
+    },
+    {
       // Lock docker to v25.0.2 for Ubuntu 23.04.
       matchFileNames: [
         'os/ubuntu-23.04/Earthfile',
