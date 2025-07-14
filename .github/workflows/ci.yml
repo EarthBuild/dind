@@ -14,6 +14,9 @@ concurrency:
 jobs:
   test:
     name: test
+    strategy:
+      matrix:
+        os: [alpine, ubuntu-20.04, ubuntu-23.04, ubuntu-24.04]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -22,7 +25,6 @@ jobs:
       FORCE_COLOR: 1
       EARTHLY_CONVERSION_PARALLELISM: "5"
       EARTHLY_INSTALL_ID: "earthbuild-dind-githubactions"
-      EARTHLY_REMOTE_CACHE: ghcr.io/earthbuild/ci-dind:cache
     steps:
       - uses: actions/checkout@v4
       # The dind (common+alpine-kind-test and common+ubuntu-kind-test) detects
@@ -48,4 +50,4 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
         if: github.event.pull_request.head.repo.full_name == github.repository
       - name: Run tests
-        run: earthly --ci -P --push +test
+        run: earthly --ci -P --push +test --OS=${{ matrix.os }}
