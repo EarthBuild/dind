@@ -2,7 +2,7 @@ VERSION --wildcard-builds 0.8
 
 PROJECT earthly-technologies/core
 
-# test runs tests for all defined dind images in this repo
+# test runs tests for for the given OS image (os/*/Earthfile) in this repo
 test:
     ARG --required OS
     BUILD --pass-args ./os/$OS+test-build
