@@ -2,9 +2,10 @@ VERSION --wildcard-builds 0.8
 
 PROJECT earthly-technologies/core
 
-# test runs tests for all defined dind images in this repo
+# test runs tests for for the given OS image (os/*/Earthfile) in this repo
 test:
-    BUILD --pass-args ./os/*+test-build
+    ARG --required OS
+    BUILD --pass-args ./os/$OS+test-build
 
 # release expects to get a renovate branch in the form of renovate/<os>-dind-image, extracts the os and then kicks off its +release target
 # this is meant to be run by a github workflow
