@@ -14,8 +14,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Update DockerHub description
         run: |
+          DESCRIPTION='The `dind` image is designed for EarthBuild targets that use the `WITH DOCKER` command'
+          FULL_DESCRIPTION=$(jq -Rs . < README.md)
           curl -X PATCH \
             -H "Authorization: Bearer ${{ secrets.DOCKERHUB_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d '{"description": "The `dind` image is designed for EarthBuild targets that use the `WITH DOCKER` command"}' \
+            -d "{\"description\": \"$DESCRIPTION\", \"full_description\": $FULL_DESCRIPTION}" \
             https://hub.docker.com/v2/repositories/earthbuild/dind/
