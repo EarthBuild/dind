@@ -1,5 +1,7 @@
 [![Release](https://github.com/earthbuild/dind/actions/workflows/release.yml/badge.svg)](https://github.com/earthbuild/dind/actions/workflows/release.yml) ![Docker Pulls](https://img.shields.io/docker/pulls/earthbuild/dind)
 
+# EarthBuild Docker In Docker (dind) Images
+
 The `dind` (docker-in-docker) image is designed for EarthBuild targets that use the `WITH DOCKER` command.
 
 For information on how to use these images, please refer to [docker in EarthBuild](https://docs.earthly.dev/docs/guides/docker-in-earthly).
