@@ -1,4 +1,4 @@
-name: Update Docker Hub README
+name: Update Docker Hub description
 
 on:
   push:
@@ -6,12 +6,8 @@ on:
     # paths: [ README.md ]
 
 jobs:
-  update-docker-hub-readmes:
-    name: update dockerhub readmes
-    runs-on: ubuntu-latest
-    env:
-      # Used in our github action as the token - TODO: look to change it into an input
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  update:
+    runs-on: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v4
         with:
@@ -22,4 +18,4 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: earthbuild/dind
-          short-description: The `dind` image is designed for EarthBuild targets that use the `WITH DOCKER` command
+          # short-description: The `dind` image is designed for EarthBuild targets that use the `WITH DOCKER` command
