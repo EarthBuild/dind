@@ -68,7 +68,7 @@
     {
       customType: 'regex',
       managerFilePatterns: [
-        '/docs/dockerhub.md$/',
+        'README.md$/',
       ],
       matchStrings: [
         '\\*\\s+\\`(?<currentValue>.+?)\\`\\n',
