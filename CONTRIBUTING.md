@@ -57,7 +57,7 @@ Community members do not have permissions to push a built image and run the test
 
 ## Deployment
 
-When the relevant dependencies are updated by Renovate, new images/tags will be pushed automatically to the container registries - [ghcr.io/earthbuild/dind](https://ghcr.io/earthbuild/dind) and [earthbuild/dind](https://hub.docker.com/r/earthlbuild/dind).
+When the relevant dependencies are updated by Renovate, new images/tags will be pushed automatically to the container registries - [ghcr.io/earthbuild/dind](https://ghcr.io/earthbuild/dind) and [earthbuild/dind](https://hub.docker.com/r/earthbuild/dind).
 
 ## Contributing
 
