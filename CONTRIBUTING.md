@@ -11,7 +11,7 @@ However, the installations of docker and other dependencies are done via an inst
 
 ### Dependencies
 
-Dependencies are maintained by Renovate and will be merged automatically (provided required checks pass), primarly
+Dependencies are maintained by Renovate and will be merged automatically (provided required checks pass), primarily
 dependencies that will trigger new versions of the dind images such as the docker or the os (alpine) versions.
 
 ## Repo structure
