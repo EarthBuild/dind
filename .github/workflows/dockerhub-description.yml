@@ -1,0 +1,21 @@
+name: Update Docker Hub description
+
+on:
+  push:
+    # branches: [ main ]
+    # paths: [ README.md ]
+
+jobs:
+  update:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Update DockerHub description
+        uses: peter-evans/dockerhub-description@v4.0.2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: earthbuild/dind
+          short-description: The `dind` image is designed for EarthBuild targets
