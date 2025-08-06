@@ -68,7 +68,7 @@
     {
       customType: 'regex',
       managerFilePatterns: [
-        'README.md$/',
+        '/^README.md$/',
       ],
       matchStrings: [
         '\\*\\s+\\`(?<currentValue>.+?)\\`\\n',

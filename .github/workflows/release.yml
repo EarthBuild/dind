@@ -39,7 +39,7 @@ jobs:
           version: v0.8.15
       - name: Log in to container registries (non fork only)
         run: |-
-          docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_TOKEN }}"
+          docker login --username "${{ vars.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_TOKEN }}"
           docker login ghcr.io --username ${{ github.actor }} --password "${{ secrets.GITHUB_TOKEN }}"
         if: github.event.pull_request.head.repo.full_name == github.repository
       - name: Build & Push image
