@@ -10,7 +10,7 @@ ARG --global OS_IMAGE=ubuntu
 
 ARG --global OS_VERSION=24.04
 # renovate: datasource=github-releases depName=docker/docker
-LET docker_package_version=28.5.0
+LET docker_package_version=28.5.1
 ARG --global DOCKER_VERSION=5:$docker_package_version-1~ubuntu.$OS_VERSION~noble
 
 # DIR_PATH is set to that common targets can call os specific targets. It should match the directory name this Earthfile is located in
