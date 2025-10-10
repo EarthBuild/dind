@@ -1,18 +1,11 @@
 {
   $schema: 'https://docs.renovatebot.com/renovate-schema.json',
   extends: [
-    'config:recommended',
-    'security:openssf-scorecard'
+    'config:best-practices',
+    'security:openssf-scorecard',
+    ':semanticCommits'
   ],
   forkProcessing: 'enabled',
-  configMigration: true,
-  prHourlyLimit: 1,
-  schedule: [],
-  enabledManagers: [
-    'dockerfile',
-    'custom.regex',
-    'github-actions',
-  ],
   dockerfile: {
     managerFilePatterns: [
       '/Earthfile/',

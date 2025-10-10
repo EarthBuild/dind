@@ -1,8 +1,6 @@
 VERSION --build-auto-skip 0.8
 
-PROJECT earthly-technologies/core
-
-FROM alpine
+FROM alpine:3.22.2@sha256:9eec16c5eada75150a82666ba0ad6df76b164a6f8582ba5cb964c0813fa56625
 
 IMPORT ../../common AS common
 
