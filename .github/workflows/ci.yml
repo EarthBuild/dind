@@ -31,7 +31,7 @@ jobs:
       EARTHLY_CONVERSION_PARALLELISM: "5"
       EARTHLY_INSTALL_ID: "earthbuild-dind-githubactions"
     steps:
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3  # v6.0.0
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
       # The dind (common+alpine-kind-test and common+ubuntu-kind-test) detects
       # the host's IPv6 capability and then requires IPv6 NAT to create networks
       # for kind. So we load it here.
