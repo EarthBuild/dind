@@ -27,7 +27,7 @@ jobs:
           - ubuntu-20.04
           - ubuntu-23.04
           - ubuntu-24.04
-    runs-on: ubuntu-24.04-arm
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       packages: write
