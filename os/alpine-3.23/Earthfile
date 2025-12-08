@@ -1,6 +1,8 @@
 VERSION --build-auto-skip 0.8
 
-FROM alpine:3.23.0@sha256:51183f2cfa6320055da30872f211093f9ff1d3cf06f39a0bdb212314c5dc7375
+PROJECT earthly-technologies/core
+
+FROM alpine
 
 IMPORT ../../common AS common
 
@@ -8,8 +10,8 @@ ARG --global OS_IMAGE=alpine
 
 # renovate: datasource=docker depName=alpine
 ARG --global OS_VERSION=3.23
-# renovate: datasource=repology depName=alpine_3_23/docker versioning=loose
-ARG --global DOCKER_VERSION=28.3.3-r4
+# renovate: datasource=repology depName=alpine_3_23/docker
+ARG --global DOCKER_VERSION=29.1.2-r1
 
 # DIR_PATH is set to that common targets can call os specific targets. It should match the directory name this Earthfile is located in
 ARG --global DIR_PATH=$OS_IMAGE
