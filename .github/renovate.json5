@@ -125,8 +125,17 @@
       matchPackageNames: [
         'earthbuild/dind',
       ],
-      matchCurrentVersion: '/^alpine-.*/',
-      allowedVersions: '/^alpine-.*/',
+      matchCurrentVersion: '/^alpine-3\\.22-.*/',
+      allowedVersions: '/^alpine-3\\.22-.*/',
+      versioning: 'regex:^(?<compatibility>.*)-(?<major>\\d+\\.\\d+)-docker-(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-r(?<revision>\\d+)$',
+    },
+    {
+      groupName: 'docs-dind-images',
+      matchPackageNames: [
+        'earthbuild/dind',
+      ],
+      matchCurrentVersion: '/^alpine-3\\.23-.*/',
+      allowedVersions: '/^alpine-3\\.23-.*/',
       versioning: 'regex:^(?<compatibility>.*)-(?<major>\\d+\\.\\d+)-docker-(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-r(?<revision>\\d+)$',
     },
     {

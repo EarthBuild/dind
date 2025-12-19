@@ -8,11 +8,11 @@ ARG --global OS_IMAGE=alpine
 
 # renovate: datasource=docker depName=alpine
 ARG --global OS_VERSION=3.22
-# renovate: datasource=repology depName=alpine_3_22/docker versioning=loose
+# renovate: datasource=repology depName=alpine_3_22/docker
 ARG --global DOCKER_VERSION=28.3.3-r4
 
 # DIR_PATH is set to that common targets can call os specific targets. It should match the directory name this Earthfile is located in
-ARG --global DIR_PATH=$OS_IMAGE
+ARG --global DIR_PATH=$OS_IMAGE-$OS_VERSION
 
 # release builds the image using a new datetime as a suffix and run tests against the pushed image, then finally retag and push the image without the datetime suffix
 release:
