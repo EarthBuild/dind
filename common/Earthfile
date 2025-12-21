@@ -1,6 +1,6 @@
 VERSION --build-auto-skip 0.8
 
-FROM alpine:3.23.2@sha256:c93cec902b6a0c6ef3b5ab7c65ea36beada05ec1205664a4131d9e8ea13e405d
+FROM alpine:3.23.2@sha256:865b95f46d98cf867a156fe4a135ad3fe50d2056aa3f25ed31662dff6da4eb62
 
 # EARTHLY_REPO_VERSION specifies a branch and/or commit of earthly/earthly (it defaults to the earthly cli version if left empty)
 ARG EARTHLY_REPO_VERSION
@@ -116,7 +116,7 @@ build-and-test:
 # push-new-tag expects to get an image with a tag that contains a date as a suffix, and save the image with the same tag but without the date suffix
 # this is used to "graduate" the image version from a temporary version to an official version.
 push-new-tag:
-    FROM alpine:3.23.2@sha256:c93cec902b6a0c6ef3b5ab7c65ea36beada05ec1205664a4131d9e8ea13e405d
+    FROM alpine:3.23.2@sha256:865b95f46d98cf867a156fe4a135ad3fe50d2056aa3f25ed31662dff6da4eb62
     ARG --required TAG_WITH_DATE
     WAIT
         IF ! [[ "$TAG_WITH_DATE" =~ "-[0-9]{14}$" ]]
