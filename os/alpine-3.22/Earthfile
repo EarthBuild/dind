@@ -6,7 +6,7 @@ IMPORT ../../common AS common
 
 ARG --global OS_IMAGE=alpine
 
-ARG --global OS_VERSION=3.23
+ARG --global OS_VERSION=3.22
 # renovate: datasource=repology depName=alpine_3_23/docker versioning=loose
 ARG --global DOCKER_VERSION=28.3.3-r5
 
