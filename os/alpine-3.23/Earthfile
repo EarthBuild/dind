@@ -11,7 +11,7 @@ ARG --global OS_IMAGE=alpine
 # renovate: datasource=docker depName=alpine
 ARG --global OS_VERSION=3.23
 # renovate: datasource=repology depName=alpine_3_23/docker
-ARG --global DOCKER_VERSION=29.1.2-r1
+ARG --global DOCKER_VERSION=29.1.3-r3
 
 # DIR_PATH is set to that common targets can call os specific targets. It should match the directory name this Earthfile is located in
 ARG --global DIR_PATH=$OS_IMAGE-$OS_VERSION
