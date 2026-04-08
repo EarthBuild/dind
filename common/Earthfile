@@ -2,7 +2,7 @@ VERSION --build-auto-skip 0.8
 
 FROM alpine:3.23.2@sha256:865b95f46d98cf867a156fe4a135ad3fe50d2056aa3f25ed31662dff6da4eb62
 
-# EARTHLY_REPO_VERSION specifies a branch and/or commit of earthly/earthly (it defaults to the earthly cli version if left empty)
+# EARTHLY_REPO_VERSION specifies a branch and/or commit of Earthbuild/earthbuild (it defaults to the earth cli version if left empty)
 ARG EARTHLY_REPO_VERSION
 
 IMPORT github.com/EarthBuild/earthbuild/buildkitd:$EARTHLY_REPO_VERSION AS earthly
@@ -82,7 +82,7 @@ get-image-info:
     RUN echo $image_full_name > $dir/name && echo $TAG > $dir/tag
     SAVE ARTIFACT $dir
 
-# test runs tests against the specified image (DIND_IMAGE) or otherwise uses the image specified in earthly/earthly repo
+# test runs tests against the specified image (DIND_IMAGE) or otherwise uses the image specified in Earthbuild/earthbuild repo
 test:
     # DIND_IMAGE is the full container image name & tag to run the tests against. The image must exist in the remote container registry
     ARG DIND_IMAGE
@@ -92,7 +92,7 @@ test:
 # build-and-test is used to build a new image and run tests against it after pushing it to registry
 # this can be used on either the final image or a test image (which is differentiated by the repo and tag that is used)
 # this target will call +build & +test targets that are defined in $DIR_PATH/Earthfile
-# Note: +test will only run when executing earthly with the --push flag since the tests need to run against the pushed image
+# Note: +test will only run when executing earth with the --push flag since the tests need to run against the pushed image
 build-and-test:
     # DIR_PATH needs to match the directory name of the linux distribution of the dind image (alpine, ubuntu-22.04, ...)
     ARG --required DIR_PATH
