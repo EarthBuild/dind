@@ -35,20 +35,6 @@
     {
       customType: 'regex',
       managerFilePatterns: [
-        '/Earthfile/',
-      ],
-      matchStrings: [
-        '# renovate: datasource=repology depName=alpine_(?<currentValue>\\d+_\\d+)',
-      ],
-      currentValueTemplate: "{{{ replace '_' '.' currentValue }}}",
-      datasourceTemplate: 'docker',
-      depNameTemplate: 'alpine',
-      versioningTemplate: 'regex:^(?<major>\\d+)[._](?<minor>\\d+)$',
-      autoReplaceStringTemplate: '# renovate: datasource=repology depName=alpine_{{{newMajor}}}_{{{newMinor}}}',
-    },
-    {
-      customType: 'regex',
-      managerFilePatterns: [
         '/^\\.arg$/',
       ],
       matchStrings: [
