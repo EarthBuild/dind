@@ -8,7 +8,7 @@ test:
 # release expects to get a renovate branch in the form of renovate/<os>-dind-image, extracts the os and then kicks off its +release target
 # this is meant to be run by a github workflow
 release:
-    FROM alpine:3.23.3@sha256:25109184c71bdad752c8312a8623239686a9a2071e8825f20acb8f2198c3f659
+    FROM alpine:3.23.4@sha256:5b10f432ef3da1b8d4c7eb6c487f2f5a8f096bc91145e68878dd4a5019afde11
     # RENOVATE_BRANCH is the renovate branch that is expected to get merged and trigger this target
     ARG --required RENOVATE_BRANCH
     LET os=${RENOVATE_BRANCH#renovate/}
