@@ -5,6 +5,9 @@ on:
     branches: [ main ]
     paths: [ README.md ]
 
+permissions:
+  contents: read
+
 jobs:
   docker-hub-description:
     runs-on: ubuntu-24.04-arm
