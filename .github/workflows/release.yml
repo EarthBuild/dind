@@ -42,6 +42,8 @@ jobs:
           docker login ghcr.io --username ${{ github.actor }} --password "${{ secrets.GITHUB_TOKEN }}"
         if: github.event.pull_request.head.repo.full_name == github.repository
       - name: Build & Push image
+        env:
+          RENOVATE_BRANCH: ${{ github.head_ref }}
         run: |
-          earth --ci -P --push +release --RENOVATE_BRANCH=${{github.head_ref}} # default:ghcr.io
-          earth --ci -P --push +release --RENOVATE_BRANCH=${{github.head_ref}} --CR_HOST=docker.io
+          earth --ci -P --push +release --RENOVATE_BRANCH="$RENOVATE_BRANCH" # default:ghcr.io
+          earth --ci -P --push +release --RENOVATE_BRANCH="$RENOVATE_BRANCH" --CR_HOST=docker.io
