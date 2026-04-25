@@ -28,11 +28,11 @@ release:
 test-build:
     BUILD --pass-args common+build-and-test --IMAGE_NAME="dindtest"
 
-# build builds an dind:alpine image
+# build builds an dind image
 build:
     BUILD --pass-args --platform=linux/amd64 --platform=linux/arm64 common+build
 
-# test runs test for a dind:alpine image
+# test runs test for a dind image
 # this is primarly used to run against a newly, temporariy image build by +test-build
 test:
     BUILD --pass-args common+alpine-kind-test

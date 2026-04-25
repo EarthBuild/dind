@@ -6,10 +6,10 @@ IMPORT ../../common AS common
 
 ARG --global OS_IMAGE=ubuntu
 
-ARG --global OS_VERSION=23.04
+ARG --global OS_VERSION=26.04
 # renovate: datasource=github-releases depName=docker/docker
-LET docker_package_version=25.0.2
-ARG --global DOCKER_VERSION=5:$docker_package_version-1~ubuntu.$OS_VERSION~lunar
+LET docker_package_version=29.4.1
+ARG --global DOCKER_VERSION=5:$docker_package_version-1~ubuntu.$OS_VERSION~resolute
 
 # DIR_PATH is set to that common targets can call os specific targets. It should match the directory name this Earthfile is located in
 ARG --global DIR_PATH=$OS_IMAGE-$OS_VERSION
