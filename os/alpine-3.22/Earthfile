@@ -28,7 +28,7 @@ release:
 test-build:
     BUILD --pass-args common+build-and-test --IMAGE_NAME="dindtest"
 
-# build builds an dind image
+# build builds a dind image
 build:
     BUILD --pass-args --platform=linux/amd64 --platform=linux/arm64 common+build
 
