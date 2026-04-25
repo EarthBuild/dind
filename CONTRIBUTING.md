@@ -16,24 +16,20 @@ dependencies that will trigger new versions of the dind images such as the docke
 
 ## Repo structure
 
-```bash
-.
-├── Earthfile // Targets that apply to all images (e.g. +test)
-├── common
-│   └── Earthfile // A library of common helper targets
-└── os // Each directory contains an Earthfile with targets to maintain the specific os (e.g. +test, +build)
-    ├── alpine-3.22
-    │   └── Earthfile
-    ├── alpine-3.23
-    │   └── Earthfile
-    ├── ubuntu-20.04
-    │   └── Earthfile
-    ├── ubuntu-23.04
-    │   └── Earthfile
-    └── ubuntu-24.04
-    │   └── Earthfile
-    └── ubuntu-26.04
-        └── Earthfile
+```mermaid
+graph LR
+    root["."] --> ef["Earthfile<br/><i>Targets for all images (e.g. +test)</i>"]
+    root --> common
+    root --> os["os/<br/><i>OS-specific targets (+test, +build)</i>"]
+
+    common --> cef["Earthfile<br/><i>Common helper targets</i>"]
+
+    os --> a322["alpine-3.22/Earthfile"]
+    os --> a323["alpine-3.23/Earthfile"]
+    os --> u2004["ubuntu-20.04/Earthfile"]
+    os --> u2304["ubuntu-23.04/Earthfile"]
+    os --> u2404["ubuntu-24.04/Earthfile"]
+    os --> u2604["ubuntu-26.04/Earthfile"]
 ```
 
 ## Testing
