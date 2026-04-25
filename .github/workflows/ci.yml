@@ -39,9 +39,7 @@ jobs:
       contents: read
       packages: write
     env:
-      FORCE_COLOR: 1
       EARTHLY_CONVERSION_PARALLELISM: "5"
-      EARTHLY_INSTALL_ID: "earthbuild-dind-githubactions"
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
       # The dind (common+alpine-kind-test and common+ubuntu-kind-test) detects
