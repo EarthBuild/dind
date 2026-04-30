@@ -22,13 +22,17 @@ dependencies that will trigger new versions of the dind images such as the docke
 ├── common
 │   └── Earthfile // A library of common helper targets
 └── os // Each directory contains an Earthfile with targets to maintain the specific os (e.g. +test, +build)
-    ├── alpine
+    ├── alpine-3.22
+    │   └── Earthfile
+    ├── alpine-3.23
     │   └── Earthfile
     ├── ubuntu-20.04
     │   └── Earthfile
     ├── ubuntu-23.04
     │   └── Earthfile
     └── ubuntu-24.04
+    │   └── Earthfile
+    └── ubuntu-26.04
         └── Earthfile
 ```
 
