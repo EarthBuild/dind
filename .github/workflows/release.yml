@@ -34,7 +34,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y qemu-user-static binfmt-support
           sudo update-binfmts --display
-      - uses: earthbuild/actions-setup@9390e75e0899caf56173ec103f7403a527f60685 # main
+      - uses: earthbuild/actions-setup@e67f0090f3fa8463d40f92096b066aade158ea10 # main
 
       - name: Log in to container registries (non fork only)
         run: |-
