@@ -128,8 +128,8 @@
       matchPackageNames: [
         'earthbuild/dind',
       ],
-      matchCurrentVersion: '/^ubuntu-23\\.04-.*/',
-      allowedVersions: '/^ubuntu-23\\.04-.*/',
+      matchCurrentVersion: '/^ubuntu-24\\.04-.*/',
+      allowedVersions: '/^ubuntu-24\\.04-.*/',
       versioning: 'regex:^(?<compatibility>.*)-(?<major>\\d+\\.\\d+)-docker-(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-(?<revision>\\d+)$',
     },
     {
@@ -137,8 +137,8 @@
       matchPackageNames: [
         'earthbuild/dind',
       ],
-      matchCurrentVersion: '/^ubuntu-24\\.04-.*/',
-      allowedVersions: '/^ubuntu-24\\.04-.*/',
+      matchCurrentVersion: '/^ubuntu-26\\.04-.*/',
+      allowedVersions: '/^ubuntu-26\\.04-.*/',
       versioning: 'regex:^(?<compatibility>.*)-(?<major>\\d+\\.\\d+)-docker-(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-(?<revision>\\d+)$',
     },
     {
