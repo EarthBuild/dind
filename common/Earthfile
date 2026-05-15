@@ -20,19 +20,11 @@ ARG --global IMAGE_NAME
 build:
     # OS_IMAGE is the base image to use, e.g. alpine, ubuntu
     ARG --required OS_IMAGE
-    # OS_VERSION is the version of the base OS to use, e.g. 3.18.0, 23.04
+    # OS_VERSION is the version of the base OS to use, e.g. 3.18.0, 26.04
     ARG --required OS_VERSION
     # DOCKER_VERSION is the version of docker to use, e.g. 20.10.14
     ARG --required DOCKER_VERSION
     FROM $OS_IMAGE:$OS_VERSION
-    # Ubuntu 23.04 has reached EOL
-    IF [ "$OS_VERSION" = "23.04" ]
-        RUN sed -i \
-            -e 's/archive.ubuntu.com\/ubuntu/old-releases.ubuntu.com\/ubuntu/g' \
-            -e 's/ports.ubuntu.com\/ubuntu-ports/old-releases.ubuntu.com\/ubuntu/g' \
-            -e 's/security.ubuntu.com\/ubuntu/old-releases.ubuntu.com\/ubuntu/g' \
-            /etc/apt/sources.list
-    END
     COPY earthly+export-docker-script/docker-auto-install.sh /usr/local/bin/docker-auto-install.sh
     RUN docker-auto-install.sh
     LET DOCKER_VERSION_TAG=$DOCKER_VERSION
@@ -55,7 +47,7 @@ build:
 get-image-info:
     # OS_IMAGE is the base image to use, e.g. alpine, ubuntu
     ARG --required OS_IMAGE
-    # OS_VERSION is the version of the base OS to use, e.g. 3.18.0, 23.04
+    # OS_VERSION is the version of the base OS to use, e.g. 3.18.0, 26.04
     ARG --required OS_VERSION
     # DOCKER_VERSION is the version of docker to use, e.g. 20.10.14
     ARG --required DOCKER_VERSION
