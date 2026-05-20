@@ -15,17 +15,6 @@
     {
       customType: 'regex',
       managerFilePatterns: [
-        '/.*?\\.yml/',
-      ],
-      matchStrings: [
-        '- uses: earthbuild/actions-setup@.*?[\\s\\n]+.*?[\\s\\n]+with:[\\s\\n]*version: (?<currentValue>.*?)[\\s\\n/]+',
-      ],
-      depNameTemplate: 'earthbuild/earthbuild',
-      datasourceTemplate: 'github-releases',
-    },
-    {
-      customType: 'regex',
-      managerFilePatterns: [
         '/Earthfile/',
       ],
       matchStrings: [
