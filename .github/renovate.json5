@@ -91,16 +91,6 @@
       allowedVersions: '28.1.1',
     },
     {
-      // Lock docker to v25.0.2 for Ubuntu 23.04.
-      matchFileNames: [
-        'os/ubuntu-23.04/Earthfile',
-      ],
-      matchPackageNames: [
-        'docker/docker',
-      ],
-      allowedVersions: '25.0.2',
-    },
-    {
       automerge: true,
       matchPackageNames: [
         '*',
@@ -138,8 +128,8 @@
       matchPackageNames: [
         'earthbuild/dind',
       ],
-      matchCurrentVersion: '/^ubuntu-23\\.04-.*/',
-      allowedVersions: '/^ubuntu-23\\.04-.*/',
+      matchCurrentVersion: '/^ubuntu-24\\.04-.*/',
+      allowedVersions: '/^ubuntu-24\\.04-.*/',
       versioning: 'regex:^(?<compatibility>.*)-(?<major>\\d+\\.\\d+)-docker-(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-(?<revision>\\d+)$',
     },
     {
@@ -147,8 +137,8 @@
       matchPackageNames: [
         'earthbuild/dind',
       ],
-      matchCurrentVersion: '/^ubuntu-24\\.04-.*/',
-      allowedVersions: '/^ubuntu-24\\.04-.*/',
+      matchCurrentVersion: '/^ubuntu-26\\.04-.*/',
+      allowedVersions: '/^ubuntu-26\\.04-.*/',
       versioning: 'regex:^(?<compatibility>.*)-(?<major>\\d+\\.\\d+)-docker-(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-(?<revision>\\d+)$',
     },
     {

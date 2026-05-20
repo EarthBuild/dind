@@ -25,7 +25,6 @@ jobs:
           - alpine-3.22
           - alpine-3.23
           - ubuntu-20.04
-          - ubuntu-23.04
           - ubuntu-24.04
           - ubuntu-26.04
     runs-on: ubuntu-24.04
