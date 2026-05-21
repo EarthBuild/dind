@@ -18,7 +18,7 @@
         '/Earthfile/',
       ],
       matchStrings: [
-        '\\s*#\\s*renovate:\\s*datasource=(?<datasource>.*?)\\s+depName=(?<depName>.*?)[\\s\\n]+(versioning=(?<versioning>.*?)\\s+)?(ARG|LET)\\s+.*?(_VERSION|_VER|version)=(?<currentValue>.*?)($|\\s|\\n)',
+        '\\s*#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)(?:\\s+packageName=(?<packageName>\\S+))?[\\s\\n]+(versioning=(?<versioning>\\S+)\\s+)?(ARG|LET)\\s+.*?(_VERSION|_VER|version)=(?<currentValue>.*?)($|\\s|\\n)',
       ],
     },
     {
@@ -40,10 +40,36 @@
         '/^README.md$/',
       ],
       matchStrings: [
-        '\\*\\s+\\`(?<currentValue>.+?)\\`\\n',
+        '\\*\\s+\\`alpine-3\\.22-docker-(?<currentValue>.*?)\\`\\n',
       ],
-      depNameTemplate: 'earthbuild/dind',
-      datasourceTemplate: 'docker',
+      depNameTemplate: 'alpine_3_22/docker',
+      datasourceTemplate: 'repology',
+      versioningTemplate: 'loose',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^README.md$/',
+      ],
+      matchStrings: [
+        '\\*\\s+\\`alpine-3\\.23-docker-(?<currentValue>.*?)\\`\\n',
+      ],
+      depNameTemplate: 'alpine_3_23/docker',
+      datasourceTemplate: 'repology',
+      versioningTemplate: 'loose',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^README.md$/',
+      ],
+      matchStrings: [
+        '\\*\\s+\\`ubuntu-(?<osVersion>\\d+\\.\\d+)-docker-(?<currentValue>.*?)-\\d+\\`\\n',
+      ],
+      depNameTemplate: 'moby/moby-{{{osVersion}}}',
+      packageNameTemplate: 'moby/moby',
+      datasourceTemplate: 'github-releases',
+      versioningTemplate: 'semver-coerced',
     },
   ],
   labels: [
@@ -51,33 +77,12 @@
   ],
   packageRules: [
     {
-      groupName: "{{{ replace 'os\\/(.*?)$' '$1' packageFileDir}}}-dind-image",
-      matchManagers: [
-        'custom.regex',
-      ],
-      matchDatasources: [
-        'docker',
-        'repology',
-        'github-releases',
-      ],
-      matchFileNames: [
-        'os/**/Earthfile',
-      ],
-      matchPackageNames: [
-        '/alpine/',
-        '/alpine.*?/docker/',
-        'moby/moby',
-      ],
-    },
-    {
-      // Lock docker to v28.1.1 for Ubuntu 20.04.
-      matchFileNames: [
-        'os/ubuntu-20.04/Earthfile',
-      ],
-      matchPackageNames: [
-        'moby/moby',
+      // Lock docker to v28.1.1 for Ubuntu 20.04 and disable updates.
+      matchDepNames: [
+        'moby/moby-20.04',
       ],
       allowedVersions: '28.1.1',
+      enabled: false,
     },
     {
       automerge: true,
@@ -86,53 +91,8 @@
       ],
     },
     {
-      groupName: 'docs-dind-images',
       matchPackageNames: [
-        'earthbuild/dind',
-      ],
-      matchCurrentVersion: '/^alpine-3\\.22-.*/',
-      allowedVersions: '/^alpine-3\\.22-.*/',
-      versioning: 'regex:^(?<compatibility>.*)-(?<major>\\d+\\.\\d+)-docker-(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-r(?<revision>\\d+)$',
-    },
-    {
-      groupName: 'docs-dind-images',
-      matchPackageNames: [
-        'earthbuild/dind',
-      ],
-      matchCurrentVersion: '/^alpine-3\\.23-.*/',
-      allowedVersions: '/^alpine-3\\.23-.*/',
-      versioning: 'regex:^(?<compatibility>.*)-(?<major>\\d+\\.\\d+)-docker-(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-r(?<revision>\\d+)$',
-    },
-    {
-      groupName: 'docs-dind-images',
-      matchPackageNames: [
-        'earthbuild/dind',
-      ],
-      matchCurrentVersion: '/^ubuntu-20\\.04-.*/',
-      allowedVersions: '/^ubuntu-20\\.04-.*/',
-      versioning: 'regex:^(?<compatibility>.*)-(?<major>\\d+\\.\\d+)-docker-(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-(?<revision>\\d+)$',
-    },
-    {
-      groupName: 'docs-dind-images',
-      matchPackageNames: [
-        'earthbuild/dind',
-      ],
-      matchCurrentVersion: '/^ubuntu-24\\.04-.*/',
-      allowedVersions: '/^ubuntu-24\\.04-.*/',
-      versioning: 'regex:^(?<compatibility>.*)-(?<major>\\d+\\.\\d+)-docker-(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-(?<revision>\\d+)$',
-    },
-    {
-      groupName: 'docs-dind-images',
-      matchPackageNames: [
-        'earthbuild/dind',
-      ],
-      matchCurrentVersion: '/^ubuntu-26\\.04-.*/',
-      allowedVersions: '/^ubuntu-26\\.04-.*/',
-      versioning: 'regex:^(?<compatibility>.*)-(?<major>\\d+\\.\\d+)-docker-(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-(?<revision>\\d+)$',
-    },
-    {
-      matchPackageNames: [
-        'moby/moby',
+        '/^moby\\/moby/',
       ],
       matchDatasources: [
         'github-releases',

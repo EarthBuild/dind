@@ -1,23 +1,26 @@
 name: Release
 
 on:
-  pull_request_target:
-    types: [ closed ]
+  push:
+    branches:
+      - main
+    paths:
+      - 'os/**/Earthfile'
+      - 'README.md'
 
 jobs:
   release:
-    name: release after merging ${{ github.head_ref }}
-    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'renovate/') && endsWith(github.head_ref, '-dind-image')
+    name: release after merge
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     env:
-      FORCE_COLOR: 1
       EARTHLY_CONVERSION_PARALLELISM: "5"
-      EARTHLY_INSTALL_ID: "earthbuild-dind-githubactions"
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          fetch-depth: 0
       # The dind (common+alpine-kind-test and common+ubuntu-kind-test) detects
       # the host's IPv6 capability and then requires IPv6 NAT to create networks
       # for kind. So we load it here.
@@ -40,10 +43,23 @@ jobs:
         run: |-
           docker login --username "${{ vars.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_TOKEN }}"
           docker login ghcr.io --username ${{ github.actor }} --password "${{ secrets.GITHUB_TOKEN }}"
-        if: github.event.pull_request.head.repo.full_name == github.repository
+        if: github.repository == 'earthbuild/dind'
       - name: Build & Push image
-        env:
-          RENOVATE_BRANCH: ${{ github.head_ref }}
         run: |
-          earth --ci -P --push +release --RENOVATE_BRANCH="$RENOVATE_BRANCH" # default:ghcr.io
-          earth --ci -P --push +release --RENOVATE_BRANCH="$RENOVATE_BRANCH" --CR_HOST=docker.io
+          # Detect changed Earthfiles
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} || git diff --name-only HEAD^ HEAD || true)
+          echo "Changed files: $CHANGED_FILES"
+          
+          # Extract unique OS names
+          OS_LIST=$(echo "$CHANGED_FILES" | grep '^os/.*/Earthfile$' | awk -F'/' '{print $2}' | sort -u || true)
+          
+          if [ -z "$OS_LIST" ]; then
+            echo "No OS Earthfiles changed. Skipping build."
+            exit 0
+          fi
+          
+          for OS in $OS_LIST; do
+            echo "Releasing OS: $OS"
+            earth --ci -P --push +release --OS="$OS" # default:ghcr.io
+            earth --ci -P --push +release --OS="$OS" --CR_HOST=docker.io
+          done
