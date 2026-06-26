@@ -36,6 +36,8 @@ jobs:
           sudo apt-get install -y qemu-user-static binfmt-support
           sudo update-binfmts --display
       - uses: earthbuild/actions-setup@5d323543fa1d7b963384b46b2cbaef0bf6d88216 # v2.1.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log in to container registries (non fork only)
         run: |-
