@@ -4,6 +4,8 @@ on:
   pull_request:
     types: [opened, synchronize]
 
+permissions: {}
+
 jobs:
   count-earthly:
     runs-on: ubuntu-24.04-arm

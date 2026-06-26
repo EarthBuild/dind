@@ -7,7 +7,7 @@ IMPORT ../../common AS common
 ARG --global OS_IMAGE=ubuntu
 
 ARG --global OS_VERSION=24.04
-# renovate: datasource=github-releases depName=moby/moby
+# renovate: datasource=github-releases depName=moby/moby-24.04 packageName=moby/moby
 LET docker_package_version=28.5.2
 ARG --global DOCKER_VERSION=5:$docker_package_version-1~ubuntu.$OS_VERSION~noble
 

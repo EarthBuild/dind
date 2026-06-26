@@ -1,23 +1,32 @@
 name: Release
 
 on:
-  pull_request_target:
-    types: [ closed ]
+  push:
+    branches:
+      - main
+    paths:
+      - 'os/**/Earthfile'
+      - 'common/Earthfile'
+      - 'Earthfile'
+      - '.arg'
+      - '.github/workflows/release.yml'
+
+permissions: {}
 
 jobs:
   release:
-    name: release after merging ${{ github.head_ref }}
-    if: github.event.pull_request.merged == true && startsWith(github.head_ref, 'renovate/') && endsWith(github.head_ref, '-dind-image')
+    name: release after merge
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
     env:
-      FORCE_COLOR: 1
       EARTHLY_CONVERSION_PARALLELISM: "5"
-      EARTHLY_INSTALL_ID: "earthbuild-dind-githubactions"
+    if: github.repository == 'earthbuild/dind'
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
       # The dind (common+alpine-kind-test and common+ubuntu-kind-test) detects
       # the host's IPv6 capability and then requires IPv6 NAT to create networks
       # for kind. So we load it here.
@@ -35,15 +44,39 @@ jobs:
           sudo apt-get install -y qemu-user-static binfmt-support
           sudo update-binfmts --display
       - uses: earthbuild/actions-setup@5d323543fa1d7b963384b46b2cbaef0bf6d88216 # v2.1.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log in to container registries (non fork only)
         run: |-
           docker login --username "${{ vars.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_TOKEN }}"
           docker login ghcr.io --username ${{ github.actor }} --password "${{ secrets.GITHUB_TOKEN }}"
-        if: github.event.pull_request.head.repo.full_name == github.repository
       - name: Build & Push image
-        env:
-          RENOVATE_BRANCH: ${{ github.head_ref }}
         run: |
-          earth --ci -P --push +release --RENOVATE_BRANCH="$RENOVATE_BRANCH" # default:ghcr.io
-          earth --ci -P --push +release --RENOVATE_BRANCH="$RENOVATE_BRANCH" --CR_HOST=docker.io
+          # Detect changed files
+          if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ] || [ -z "${{ github.event.before }}" ]; then
+            CHANGED_FILES=$(git diff --name-only HEAD^ HEAD || true)
+          else
+            CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} || git diff --name-only HEAD^ HEAD || true)
+          fi
+          echo "Changed files: $CHANGED_FILES"
+
+          # Check if global files affecting the build changed
+          if echo "$CHANGED_FILES" | grep -qE '^(common/Earthfile|Earthfile|.arg|.github/workflows/release.yml)$'; then
+            echo "Global build configuration changed. Releasing all OS images."
+            OS_LIST=$(find os -maxdepth 1 -mindepth 1 -type d | sed 's|^os/||' | sort -u || true)
+          else
+            # Extract unique OS names from modified os-specific Earthfiles
+            OS_LIST=$(echo "$CHANGED_FILES" | grep '^os/.*/Earthfile$' | awk -F'/' '{print $2}' | sort -u || true)
+          fi
+
+          if [ -z "$OS_LIST" ]; then
+            echo "No OS targets to release. Skipping."
+            exit 0
+          fi
+
+          for OS in $OS_LIST; do
+            echo "Releasing OS: $OS"
+            earth --ci -P --push +release --OS="$OS" # default:ghcr.io
+            earth --ci -P --push +release --OS="$OS" --CR_HOST=docker.io
+          done
