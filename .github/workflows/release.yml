@@ -6,6 +6,10 @@ on:
       - main
     paths:
       - 'os/**/Earthfile'
+      - 'common/Earthfile'
+      - 'Earthfile'
+      - '.arg'
+      - '.github/workflows/release.yml'
 
 jobs:
   release:
@@ -16,6 +20,7 @@ jobs:
       packages: write
     env:
       EARTHLY_CONVERSION_PARALLELISM: "5"
+    if: github.repository == 'earthbuild/dind'
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
         with:
@@ -44,7 +49,6 @@ jobs:
         run: |-
           docker login --username "${{ vars.DOCKERHUB_USERNAME }}" --password "${{ secrets.DOCKERHUB_TOKEN }}"
           docker login ghcr.io --username ${{ github.actor }} --password "${{ secrets.GITHUB_TOKEN }}"
-        if: github.repository == 'earthbuild/dind'
       - name: Build & Push image
         run: |
           # Detect changed files
@@ -55,11 +59,17 @@ jobs:
           fi
           echo "Changed files: $CHANGED_FILES"
 
-          # Extract unique OS names
-          OS_LIST=$(echo "$CHANGED_FILES" | grep '^os/.*/Earthfile$' | awk -F'/' '{print $2}' | sort -u || true)
+          # Check if global files affecting the build changed
+          if echo "$CHANGED_FILES" | grep -qE '^(common/Earthfile|Earthfile|.arg|.github/workflows/release.yml)$'; then
+            echo "Global build configuration changed. Releasing all OS images."
+            OS_LIST=$(find os -maxdepth 1 -mindepth 1 -type d | sed 's|^os/||' | sort -u || true)
+          else
+            # Extract unique OS names from modified os-specific Earthfiles
+            OS_LIST=$(echo "$CHANGED_FILES" | grep '^os/.*/Earthfile$' | awk -F'/' '{print $2}' | sort -u || true)
+          fi
 
           if [ -z "$OS_LIST" ]; then
-            echo "No OS Earthfiles changed. Skipping build."
+            echo "No OS targets to release. Skipping."
             exit 0
           fi
 

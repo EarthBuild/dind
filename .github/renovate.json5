@@ -8,14 +8,14 @@
   forkProcessing: 'enabled',
   dockerfile: {
     managerFilePatterns: [
-      '/Earthfile/',
+      '**/Earthfile',
     ],
   },
   customManagers: [
     {
       customType: 'regex',
       managerFilePatterns: [
-        '/Earthfile/',
+        '**/Earthfile',
       ],
       matchStrings: [
         '\\s*#\\s*renovate:\\s*datasource=(?<datasource>\\S+)\\s+depName=(?<depName>\\S+)(?:\\s+packageName=(?<packageName>\\S+))?[\\s\\n]+(versioning=(?<versioning>\\S+)\\s+)?(ARG|LET)\\s+.*?(_VERSION|_VER|version)=(?<currentValue>.*?)($|\\s|\\n)',
@@ -24,7 +24,7 @@
     {
       customType: 'regex',
       managerFilePatterns: [
-        '/^\\.arg$/',
+        '.arg',
       ],
       matchStrings: [
         'EARTHLY_REPO_VERSION=(?<currentDigest>[a-f0-9]+)',
@@ -37,7 +37,7 @@
     {
       customType: 'regex',
       managerFilePatterns: [
-        '/^README.md$/',
+        'README.md',
       ],
       matchStrings: [
         '\\*\\s+\\`alpine-3\\.22-docker-(?<currentValue>.*?)\\`\\n',
@@ -49,7 +49,7 @@
     {
       customType: 'regex',
       managerFilePatterns: [
-        '/^README.md$/',
+        'README.md',
       ],
       matchStrings: [
         '\\*\\s+\\`alpine-3\\.23-docker-(?<currentValue>.*?)\\`\\n',
@@ -61,7 +61,7 @@
     {
       customType: 'regex',
       managerFilePatterns: [
-        '/^README.md$/',
+        'README.md',
       ],
       matchStrings: [
         '\\*\\s+\\`ubuntu-(?<osVersion>\\d+\\.\\d+)-docker-(?<currentValue>.*?)-\\d+\\`\\n',
