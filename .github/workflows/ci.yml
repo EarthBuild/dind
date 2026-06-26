@@ -28,6 +28,7 @@ jobs:
 
   test:
     name: test (${{ matrix.os }})
+    needs: lint
     strategy:
       matrix:
         os:
