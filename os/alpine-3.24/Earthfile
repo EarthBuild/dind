@@ -12,7 +12,7 @@ ARG --global OS_VERSION=3.24
 # renovate: datasource=repology depName=alpine_3_24/docker
 ARG --global DOCKER_VERSION=29.5.3-r0
 
-# DIR_PATH is set to that common targets can call os specific targets. It should match the directory name this Earthfile is located in
+# DIR_PATH must match the directory name of this Earthfile
 ARG --global DIR_PATH=$OS_IMAGE-$OS_VERSION
 
 # release builds the image using a new datetime as a suffix and run tests against the pushed image, then finally retag and push the image without the datetime suffix
@@ -35,7 +35,7 @@ build:
     BUILD --pass-args --platform=linux/amd64 --platform=linux/arm64 common+build
 
 # test runs test for a dind image
-# this is primarly used to run against a newly, temporariy image build by +test-build
+# runs tests against the temporary image built by +test-build
 test:
     BUILD --pass-args common+alpine-kind-test
     BUILD --pass-args common+alpine-docker-compose-test
