@@ -11,6 +11,7 @@ For information on how to use these images, please refer to [docker in EarthBuil
 This image supports the following Linux distributions:
 * alpine:3.22
 * alpine:3.23
+* alpine:3.24
 * ubuntu:20.04
 * ubuntu:24.04
 * ubuntu:26.04
@@ -18,6 +19,7 @@ This image supports the following Linux distributions:
 For which the current latest tags (respectively) are:
 * `alpine-3.22-docker-28.3.3-r2`
 * `alpine-3.23-docker-29.1.2-r1`
+* `alpine-3.24-docker-29.5.3-r0`
 * `ubuntu-20.04-docker-28.1.1-1`
 * `ubuntu-24.04-docker-28.5.1-1`
 * `ubuntu-26.04-docker-29.4.0-1`

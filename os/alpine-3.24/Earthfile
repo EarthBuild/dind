@@ -1,0 +1,42 @@
+VERSION --build-auto-skip 0.8
+
+PROJECT earthly-technologies/core
+
+FROM alpine:3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
+
+IMPORT ../../common AS common
+
+ARG --global OS_IMAGE=alpine
+
+ARG --global OS_VERSION=3.24
+# renovate: datasource=repology depName=alpine_3_24/docker
+ARG --global DOCKER_VERSION=29.5.3-r0
+
+# DIR_PATH is set to that common targets can call os specific targets. It should match the directory name this Earthfile is located in
+ARG --global DIR_PATH=$OS_IMAGE-$OS_VERSION
+
+# release builds the image using a new datetime as a suffix and run tests against the pushed image, then finally retag and push the image without the datetime suffix
+release:
+    RUN --no-cache date --utc +%Y%m%d%H%M%S > datetime
+    LET datetime="$(cat datetime)"
+    WAIT
+        BUILD --pass-args common+build-and-test --SUFFIX=$datetime
+    END
+    COPY --dir --pass-args common+get-image-info/image-info .
+    LET image_tag="$(cat image-info/tag)-$datetime"
+    BUILD --pass-args common+push-new-tag-multi-platform --TAG_WITH_DATE=$image_tag
+
+# test-build will build a test image that is pushed to a temporary registry and run tests against it
+test-build:
+    BUILD --pass-args common+build-and-test --IMAGE_NAME="dindtest"
+
+# build builds a dind image
+build:
+    BUILD --pass-args --platform=linux/amd64 --platform=linux/arm64 common+build
+
+# test runs test for a dind image
+# this is primarly used to run against a newly, temporariy image build by +test-build
+test:
+    BUILD --pass-args common+alpine-kind-test
+    BUILD --pass-args common+alpine-docker-compose-test
+    BUILD --pass-args common+test

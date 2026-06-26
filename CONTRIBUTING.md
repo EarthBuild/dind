@@ -26,6 +26,8 @@ dependencies that will trigger new versions of the dind images such as the docke
     │   └── Earthfile
     ├── alpine-3.23
     │   └── Earthfile
+    ├── alpine-3.24
+    │   └── Earthfile
     ├── ubuntu-20.04
     │   └── Earthfile
     └── ubuntu-24.04
