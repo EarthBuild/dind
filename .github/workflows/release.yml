@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - 'os/**/Earthfile'
-      - 'README.md'
 
 jobs:
   release:
@@ -19,6 +18,8 @@ jobs:
       EARTHLY_CONVERSION_PARALLELISM: "5"
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
       # The dind (common+alpine-kind-test and common+ubuntu-kind-test) detects
       # the host's IPv6 capability and then requires IPv6 NAT to create networks
       # for kind. So we load it here.
@@ -46,8 +47,12 @@ jobs:
         if: github.repository == 'earthbuild/dind'
       - name: Build & Push image
         run: |
-          # Detect changed Earthfiles
-          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} || git diff --name-only HEAD^ HEAD || true)
+          # Detect changed files
+          if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ] || [ -z "${{ github.event.before }}" ]; then
+            CHANGED_FILES=$(git diff --name-only HEAD^ HEAD || true)
+          else
+            CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} || git diff --name-only HEAD^ HEAD || true)
+          fi
           echo "Changed files: $CHANGED_FILES"
 
           # Extract unique OS names

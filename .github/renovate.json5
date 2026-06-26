@@ -27,7 +27,7 @@
         '/^\\.arg$/',
       ],
       matchStrings: [
-        'EARTHLY_REPO_VERSION=(?<currentDigest>.*?)($|\\s|\\n)',
+        'EARTHLY_REPO_VERSION=(?<currentDigest>[a-f0-9]+)',
       ],
       currentValueTemplate: 'main',
       depNameTemplate: 'earthbuild/earthbuild',
