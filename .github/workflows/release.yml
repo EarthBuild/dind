@@ -11,6 +11,8 @@ on:
       - '.arg'
       - '.github/workflows/release.yml'
 
+permissions: {}
+
 jobs:
   release:
     name: release after merge
