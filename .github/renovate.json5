@@ -64,6 +64,18 @@
         'README.md',
       ],
       matchStrings: [
+        '\\*\\s+\\`alpine-3\\.24-docker-(?<currentValue>.*?)\\`\\n',
+      ],
+      depNameTemplate: 'alpine_3_24/docker',
+      datasourceTemplate: 'repology',
+      versioningTemplate: 'loose',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        'README.md',
+      ],
+      matchStrings: [
         '\\*\\s+\\`ubuntu-(?<osVersion>\\d+\\.\\d+)-docker-(?<currentValue>.*?)-\\d+\\`\\n',
       ],
       depNameTemplate: 'moby/moby-{{{osVersion}}}',
