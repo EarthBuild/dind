@@ -1,6 +1,6 @@
 VERSION --build-auto-skip 0.8
 
-FROM alpine:3.23.4@sha256:5b10f432ef3da1b8d4c7eb6c487f2f5a8f096bc91145e68878dd4a5019afde11
+FROM alpine:3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
 
 # EARTHLY_REPO_VERSION specifies a branch and/or commit of Earthbuild/earthbuild (it defaults to the earth cli version if left empty)
 ARG EARTHLY_REPO_VERSION
@@ -20,19 +20,11 @@ ARG --global IMAGE_NAME
 build:
     # OS_IMAGE is the base image to use, e.g. alpine, ubuntu
     ARG --required OS_IMAGE
-    # OS_VERSION is the version of the base OS to use, e.g. 3.18.0, 23.04
+    # OS_VERSION is the version of the base OS to use, e.g. 3.23.0, 26.04
     ARG --required OS_VERSION
     # DOCKER_VERSION is the version of docker to use, e.g. 20.10.14
     ARG --required DOCKER_VERSION
     FROM $OS_IMAGE:$OS_VERSION
-    # Ubuntu 23.04 has reached EOL
-    IF [ "$OS_VERSION" = "23.04" ]
-        RUN sed -i \
-            -e 's/archive.ubuntu.com\/ubuntu/old-releases.ubuntu.com\/ubuntu/g' \
-            -e 's/ports.ubuntu.com\/ubuntu-ports/old-releases.ubuntu.com\/ubuntu/g' \
-            -e 's/security.ubuntu.com\/ubuntu/old-releases.ubuntu.com\/ubuntu/g' \
-            /etc/apt/sources.list
-    END
     COPY earthly+export-docker-script/docker-auto-install.sh /usr/local/bin/docker-auto-install.sh
     RUN docker-auto-install.sh
     LET DOCKER_VERSION_TAG=$DOCKER_VERSION
@@ -55,9 +47,9 @@ build:
 get-image-info:
     # OS_IMAGE is the base image to use, e.g. alpine, ubuntu
     ARG --required OS_IMAGE
-    # OS_VERSION is the version of the base OS to use, e.g. 3.18.0, 23.04
+    # OS_VERSION is the version of the base OS to use, e.g. 3.23.0, 26.04
     ARG --required OS_VERSION
-    # DOCKER_VERSION is the version of docker to use, e.g. 20.10.14
+    # DOCKER_VERSION is the version of docker to use, e.g. 29.4.1
     ARG --required DOCKER_VERSION
     LET DOCKER_VERSION_TAG=$DOCKER_VERSION
     IF [ "$OS_IMAGE" = "ubuntu" ]
@@ -116,7 +108,7 @@ build-and-test:
 # push-new-tag expects to get an image with a tag that contains a date as a suffix, and save the image with the same tag but without the date suffix
 # this is used to "graduate" the image version from a temporary version to an official version.
 push-new-tag:
-    FROM alpine:3.23.4@sha256:5b10f432ef3da1b8d4c7eb6c487f2f5a8f096bc91145e68878dd4a5019afde11
+    FROM alpine:3.24.1@sha256:28bd5fe8b56d1bd048e5babf5b10710ebe0bae67db86916198a6eec434943f8b
     ARG --required TAG_WITH_DATE
     WAIT
         IF ! [[ "$TAG_WITH_DATE" =~ "-[0-9]{14}$" ]]

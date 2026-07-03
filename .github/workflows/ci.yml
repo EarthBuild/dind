@@ -22,18 +22,33 @@ env:
   OTEL_RESOURCE_ATTRIBUTES: ${{ vars.OTEL_RESOURCE_ATTRIBUTES != '' && format('{0},', vars.OTEL_RESOURCE_ATTRIBUTES) || '' }}${{ github.event.pull_request != null && format('vcs.repository.change.id={0},vcs.repository.change.title={1},', github.event.pull_request.number, github.event.pull_request.title) || '' }}cicd.pipeline.run.id=${{ github.run_number }},cicd.pipeline.run.url.full=${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }},cicd.pipeline.name=${{ github.workflow }},vcs.revision.id=${{ github.sha }},vcs.ref.name=${{ github.ref_name }},vcs.repository.name=${{ github.repository }},user.id=${{ github.actor }}
   OTEL_EXPORTER_OTLP_HEADERS: ${{ secrets.OTEL_EXPORTER_OTLP_HEADERS }}
 
+permissions: {}
+
 jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+      - uses: earthbuild/actions-setup@5d323543fa1d7b963384b46b2cbaef0bf6d88216 # v2.1.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - run: earth +lint
+
   test:
     name: test (${{ matrix.os }})
+    needs: lint
     strategy:
-
       matrix:
         os:
           - alpine-3.22
           - alpine-3.23
+          - alpine-3.24
           - ubuntu-20.04
-          - ubuntu-23.04
           - ubuntu-24.04
+          - ubuntu-26.04
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -41,7 +56,7 @@ jobs:
     env:
       EARTHLY_CONVERSION_PARALLELISM: "5"
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
       # The dind (common+alpine-kind-test and common+ubuntu-kind-test) detects
       # the host's IPv6 capability and then requires IPv6 NAT to create networks
       # for kind. So we load it here.
@@ -58,7 +73,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y qemu-user-static binfmt-support
           sudo update-binfmts --display
-      - uses: earthbuild/actions-setup@7203b7659050789bb533fb98edb5995384154306 # main
+      - uses: earthbuild/actions-setup@5d323543fa1d7b963384b46b2cbaef0bf6d88216 # v2.1.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log in to GitHub Container Registry (non fork only)
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
