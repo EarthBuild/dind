@@ -4,7 +4,7 @@
 
 The `dind` (docker-in-docker) image is designed for EarthBuild targets that use the `WITH DOCKER` command.
 
-For information on how to use these images, please refer to [docker in EarthBuild](https://docs.earthly.dev/docs/guides/docker-in-earthly).
+For information on how to use these images, please refer to [docker in EarthBuild](https://docs.earthbuild.dev/guides/docker-in-earthly).
 
 ## Supported Distributions
 
