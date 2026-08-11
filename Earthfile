@@ -11,7 +11,7 @@ lint:
 
 # lint-renovate validates the Renovate configuration file
 lint-renovate:
-    FROM node:26.4.0-alpine3.24@sha256:725aeba2364a9b16beae49e180d83bd597dbd0b15c47f1f28875c290bfd255b9
+    FROM node:26.7.0-alpine3.24@sha256:aadf416b2cdce311a8811ba3f0608a61b77dbf997500e2eafe781b51f6a0b019
     WORKDIR /workspace
     RUN npm install -g renovate@latest
     COPY .github/renovate.json5 .github/renovate.json5
