@@ -3,13 +3,22 @@
   extends: [
     'config:best-practices',
     'security:openssf-scorecard',
-    ':semanticCommits'
+    ':semanticCommits',
   ],
   forkProcessing: 'enabled',
   dockerfile: {
     managerFilePatterns: [
       '**/Earthfile',
     ],
+  },
+  customDatasources: {
+    'alpine-docker': {
+      defaultRegistryUrlTemplate: 'https://pkgs.alpinelinux.org/package/v{{{packageName}}}/community/x86_64/docker',
+      format: 'html',
+      transformTemplates: [
+        '{"releases": [releases[$contains(version, "buildlogs")].{"version": $match(version, /docker-(.*?)\\.log/).groups[0]}]}',
+      ],
+    },
   },
   customManagers: [
     {
@@ -40,34 +49,11 @@
         'README.md',
       ],
       matchStrings: [
-        '\\*\\s+\\`alpine-3\\.22-docker-(?<currentValue>.*?)\\`\\n',
+        '\\*\\s+\\`alpine-(?<major>\\d+)\\.(?<minor>\\d+)-docker-(?<currentValue>.*?)\\`\\n',
       ],
-      depNameTemplate: 'alpine_3_22/docker',
-      datasourceTemplate: 'repology',
-      versioningTemplate: 'loose',
-    },
-    {
-      customType: 'regex',
-      managerFilePatterns: [
-        'README.md',
-      ],
-      matchStrings: [
-        '\\*\\s+\\`alpine-3\\.23-docker-(?<currentValue>.*?)\\`\\n',
-      ],
-      depNameTemplate: 'alpine_3_23/docker',
-      datasourceTemplate: 'repology',
-      versioningTemplate: 'loose',
-    },
-    {
-      customType: 'regex',
-      managerFilePatterns: [
-        'README.md',
-      ],
-      matchStrings: [
-        '\\*\\s+\\`alpine-3\\.24-docker-(?<currentValue>.*?)\\`\\n',
-      ],
-      depNameTemplate: 'alpine_3_24/docker',
-      datasourceTemplate: 'repology',
+      depNameTemplate: 'alpine_{{{major}}}_{{{minor}}}/docker',
+      packageNameTemplate: '{{{major}}}.{{{minor}}}',
+      datasourceTemplate: 'custom.alpine-docker',
       versioningTemplate: 'loose',
     },
     {
@@ -81,7 +67,7 @@
       depNameTemplate: 'moby/moby-{{{osVersion}}}',
       packageNameTemplate: 'moby/moby',
       datasourceTemplate: 'github-releases',
-      versioningTemplate: 'semver-coerced',
+      versioningTemplate: 'semver',
     },
   ],
   labels: [
@@ -97,19 +83,27 @@
       enabled: false,
     },
     {
-      automerge: true,
       matchPackageNames: [
-        '*',
-      ],
-    },
-    {
-      matchPackageNames: [
-        '/^moby\\/moby/',
+        'moby/moby',
       ],
       matchDatasources: [
         'github-releases',
       ],
+      extractVersion: '^(?:docker-)?v?(?<version>\\d+\\.\\d+\\.\\d+.*)$',
+      versioning: 'semver',
       separateMultipleMajor: true,
+    },
+    {
+      matchDepNames: [
+        '/^alpine_.*\\/docker$/',
+      ],
+      allowedVersions: '!/.*_.*|\\b(alpha|beta|rc)\\b/',
+    },
+    {
+      automerge: true,
+      matchPackageNames: [
+        '*',
+      ],
     },
   ],
 }

@@ -7,7 +7,7 @@ IMPORT ../../common AS common
 ARG --global OS_IMAGE=alpine
 
 ARG --global OS_VERSION=3.23
-# renovate: datasource=repology depName=alpine_3_23/docker
+# renovate: datasource=custom.alpine-docker depName=alpine_3_23/docker packageName=3.23 versioning=loose
 ARG --global DOCKER_VERSION=29.5.2-r0
 
 # DIR_PATH must match the directory name of this Earthfile
