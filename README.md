@@ -19,7 +19,7 @@ This image supports the following Linux distributions:
 For which the current latest tags (respectively) are:
 * `alpine-3.22-docker-28.3.3-r5`
 * `alpine-3.23-docker-29.5.2-r0`
-* `alpine-3.24-docker-29.5.3-r0`
+* `alpine-3.24-docker-29.5.3-r1`
 * `ubuntu-20.04-docker-28.1.1-1`
 * `ubuntu-24.04-docker-28.5.2-1`
 * `ubuntu-26.04-docker-29.4.0-1`
