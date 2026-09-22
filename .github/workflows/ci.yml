@@ -61,8 +61,14 @@ jobs:
       # the host's IPv6 capability and then requires IPv6 NAT to create networks
       # for kind. So we load it here.
       # Ref: https://github.com/moby/moby/pull/47062
-      - name: Load kernel module IPv6 NAT
-        run: sudo modprobe ip6table_nat
+      # On Ubuntu 26.04 runners, legacy iptables modules are not loaded by default,
+      # which are required by docker daemon in older container environments (e.g. ubuntu-20.04).
+      - name: Load kernel modules for NAT and iptables
+        run: |
+          sudo modprobe iptable_nat
+          sudo modprobe iptable_filter
+          sudo modprobe ip6table_nat
+          sudo modprobe ip6table_filter
       - name: Set up Docker Hub mirrors
         run: |
           sudo mkdir -p /etc/docker
