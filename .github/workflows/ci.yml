@@ -71,8 +71,7 @@ jobs:
       - name: Set up QEMU
         run: |
           sudo apt-get update
-          sudo apt-get install -y qemu-user-static binfmt-support
-          sudo update-binfmts --display
+          sudo apt-get install -y qemu-user-binfmt
       - uses: earthbuild/actions-setup@f4d20223e70dbb43b5fc08c4d857ab9cf0dbf3ae # v2.2.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
