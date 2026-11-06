@@ -1,6 +1,6 @@
 VERSION --build-auto-skip 0.8
 
-FROM alpine:3.24.3@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a
+FROM alpine:3.24.4@sha256:93b41ef40b1677fce8fcc64ff4af09daddfacf5040afde618bc46c1e2d1cc7d4
 
 # EARTHLY_REPO_VERSION specifies a branch and/or commit of Earthbuild/earthbuild (it defaults to the earth cli version if left empty)
 ARG EARTHLY_REPO_VERSION
@@ -108,7 +108,7 @@ build-and-test:
 # push-new-tag expects to get an image with a tag that contains a date as a suffix, and save the image with the same tag but without the date suffix
 # this is used to "graduate" the image version from a temporary version to an official version.
 push-new-tag:
-    FROM alpine:3.24.3@sha256:be2656061b536c1883c4034790e21d0a09c5aaaf51968b89368a3c0371ea2c9a
+    FROM alpine:3.24.4@sha256:93b41ef40b1677fce8fcc64ff4af09daddfacf5040afde618bc46c1e2d1cc7d4
     ARG --required TAG_WITH_DATE
     WAIT
         IF ! [[ "$TAG_WITH_DATE" =~ "-[0-9]{14}$" ]]
